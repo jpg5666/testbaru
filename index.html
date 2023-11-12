@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html ng-app="bioApp">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bio</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body ng-controller="BioListController as bioList" class="container">
+    <h1>Biodata</h1>
+
+    <div class="filter-container">
+        <label for="filterBio">Filter Bios:</label>
+        <select id="filterBio" ng-model="bioList.filterOption">
+            <option value="">Show All Bios</option>
+            <option ng-repeat="bio in bioList.bios" value="{{bio.name}}">{{bio.name}}</option>
+        </select>
+    </div>
+
+    <div class="card-container">
+        <div class="card" ng-repeat="bio in bioList.bios | filter: (bioList.filterOption || undefined) as filteredBios"
+            ng-class="{ 'selected': bio === bioList.selectedBio }">
+            <div class="card-header" ng-click="bioList.selectBio(bio)">
+                <h2>{{bio.name}}</h2>
+            </div>
+            <div class="card-content" ng-show="bio === bioList.selectedBio">
+                <p>NIM: {{bio.nim}}</p>
+                <p>Place: {{bio.place}}</p>
+            </div>
+            <div class="card-actions">
+                <button class="button" ng-click="bioList.editBio(bio)">Edit</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="add-bio">
+        <h2>tambahkan data</h2>
+        <form ng-submit="bioList.addBio()">
+            <label for="name">Name:</label>
+            <input type="text" ng-model="bioList.newBio.name" ng-change="bioList.capitalizeFirstLetter(bioList.newBio.name)" required>
+
+            <label for="nim">NIM:</label>
+            <input type="text" ng-model="bioList.newBio.nim" required>
+
+            <label for="place">Place:</label>
+            <input type="text" ng-model="bioList.newBio.place" required>
+
+            <button class="button btn-primary" type="submit">Add Bio</button>
+        </form>
+    </div>
+</body>
+
+</html>
